@@ -9,15 +9,15 @@ Visit the live site here: [https://tecktonik-26.netlify.app/](https://tecktonik-
 - **Modern UI/UX**: Built with a sleek glassmorphism theme, neon accents, and responsive design.
 - **Dynamic Background**: Interactive shooting star animation system built with CSS and JavaScript.
 - **Categorized Registrations**: Participants can select from curated Technical and Non-Technical events.
-- **Serverless Backend**: Uses Netlify Functions (`api.js`) to handle data submission and retrieval.
-- **CSV Data Storage**: All registration data is stored in a `registrations.csv` file for easy access and portability.
+- **Serverless Backend**: Uses Netlify Functions (`api.js`) to bridge the frontend with our cloud database.
+- **Cloud Database Persistence**: All registration data is stored securely in **Supabase**, ensuring records are never lost and can be exported at any time.
 - **Admin Dashboard**: A secure-locked participants' list protected by password authentication.
 - **Mobile Responsive**: Fully optimized for all screen sizes, ensuring a perfect view on both desktop and mobile.
 
 ## 🛠️ Technology Stack
 - **Frontend**: HTML5, Vanilla CSS (Modern CSS3 animations), Vanilla JavaScript.
 - **Backend**: Node.js via **Netlify Functions**.
-- **Database**: Local `CSV` file storage (`registrations.csv`).
+- **Database**: **Supabase** (PostgreSQL) for real-time cloud data management.
 - **Deployment**: Netlify.
 
 ## 📂 Project Structure
@@ -25,11 +25,10 @@ Visit the live site here: [https://tecktonik-26.netlify.app/](https://tecktonik-
 ├── index.html          # Main landing page & registration form
 ├── styles.css          # Design system, animations & responsive styles
 ├── script.js           # Frontend logic & star generation
-├── registrations.csv   # Database for participant records
 ├── netlify.toml        # Netlify configuration settings
 └── netlify/
     └── functions/
-        └── api.js      # Backend API handling POST/GET requests
+        └── api.js      # Backend API handling Supabase communication
 ```
 
 ## ⚙️ Local Development

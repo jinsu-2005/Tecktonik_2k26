@@ -56,8 +56,11 @@ body {
     color: var(--star-color);
     background: linear-gradient(45deg, currentColor, transparent);
     border-radius: 50%;
-    filter: drop-shadow(0 0 6px currentColor);
+    box-shadow: 0 0 6px var(--star-color);
+    /* Much faster than drop-shadow */
     transform: translate3d(150vmax, 0, 0);
+    will-change: transform;
+    /* Hint for browser optimization */
     /* Start further out */
     animation: fall var(--fall-duration) var(--fall-delay) linear infinite, tail-fade var(--tail-fade-duration) var(--fall-delay) ease-out infinite;
 }
@@ -437,12 +440,13 @@ header {
 /* --- Forms --- */
 .glass-panel {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
+    /* Reduced for performance */
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--glass-border);
     padding: 30px;
     border-radius: 15px;
     max-width: 600px;
-    /* Reduced width */
     margin: 0 auto;
     /* Center it */
 }
@@ -485,7 +489,6 @@ select {
     font-weight: 600;
     /* Bolder text */
     transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
 }
 
 input:focus,
@@ -716,7 +719,9 @@ tr:hover td {
     text-align: center;
     padding: 60px 20px 40px;
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(10px);
+    /* Reduced from 15px */
+    -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid rgba(0, 243, 255, 0.1);
     margin-top: 50px;
     overflow: hidden;
@@ -760,7 +765,9 @@ tr:hover td {
     max-width: 110px;
     /* Reduced Size */
     white-space: nowrap;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
+    /* Reduced from 10px */
+    -webkit-backdrop-filter: blur(5px);
     position: relative;
     box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
     animation: pill-pulse 3s infinite;

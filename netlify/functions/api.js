@@ -1,10 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-
-// NOTE: In a real Netlify production environment, this file path is read-only or ephemeral.
-// For a college project running locally ('netlify dev'), this works perfectly.
-// For live persistence without a database, you would typically use an external API (Google Sheets/Airtable).
-const DATA_FILE = path.resolve(__dirname, '../../registrations.csv');
+const SUPABASE_URL = "https://bruskkdetbatigteudqr.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJydXNra2RldGJhdGlndGV1ZHFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyOTc0MTYsImV4cCI6MjA4NTg3MzQxNn0.hQNQjfGkU-ueCzmg8jiJeLAWjzlbfiAzzW5zhDzLXNw";
 
 exports.handler = async (event, context) => {
 
@@ -13,47 +8,57 @@ exports.handler = async (event, context) => {
         try {
             const data = JSON.parse(event.body);
 
-            // Clean data to prevent CSV injection
-            const clean = (str) => String(str).replace(/,/g, ' ').replace(/\n/g, ' ');
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/registrations`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    college: data.college,
+                    dept: data.dept,
+                    year: data.year,
+                    email: data.email,
+                    mobile: data.mobile,
+                    gender: data.gender,
+                    events: data.events
+                })
+            });
 
-            const csvLine = `\n${clean(data.name)},${clean(data.college)},${clean(data.dept)},${clean(data.year)},${clean(data.email)},${clean(data.mobile)},${clean(data.gender)},${clean(data.events)}`;
-
-            // Append to file
-            // Note: On Netlify Live, this only writes to the ephemeral lambda instance.
-            // It will disappear after the function goes cold. Works fine on Localhost.
-            fs.appendFileSync(DATA_FILE, csvLine);
+            if (!response.ok) {
+                const error = await response.text();
+                console.error("Supabase Error:", error);
+                throw new Error("Failed to save to Supabase");
+            }
 
             return {
                 statusCode: 200,
-                body: JSON.stringify({ message: "Saved" })
+                body: JSON.stringify({ message: "Saved Successfully" })
             };
         } catch (error) {
-            return { statusCode: 500, body: "Error writing data" };
+            console.error("Function Error:", error);
+            return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
         }
     }
 
     // --- GET: Fetch Participants ---
     if (event.httpMethod === 'GET') {
         try {
-            const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
-            const lines = fileContent.trim().split('\n');
-            const headers = lines[0].split(',');
-
-            const participants = lines.slice(1).map(line => {
-                const values = line.split(',');
-                // CSV Columns: Name(0), College(1), Dept(2), Year(3), Email(4), Mobile(5), Gender(6), Events(7)
-                // Returning ALL data as requested (Admin View protected by Client-Side Password)
-                return {
-                    name: values[0],
-                    college: values[1],
-                    dept: values[2],
-                    year: values[3],
-                    email: values[4],
-                    mobile: values[5],
-                    gender: values[6],
-                    events: values[7]
-                };
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/registrations?select=*`, {
+                method: 'GET',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json'
+                }
             });
+
+            if (!response.ok) throw new Error("Failed to fetch from Supabase");
+
+            const participants = await response.json();
 
             return {
                 statusCode: 200,
@@ -61,7 +66,7 @@ exports.handler = async (event, context) => {
                 body: JSON.stringify(participants)
             };
         } catch (error) {
-            return { statusCode: 500, body: "Error reading data" };
+            return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
         }
     }
 
