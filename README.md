@@ -3,7 +3,7 @@
 A modern, high-performance web application designed for the **TECHTONIK ’26** National Level Technical Symposium. This project features a stunning glassmorphism UI, interactive shooting star animations, and a serverless backend for participant registration.
 
 ## 🚀 Live Demo
-The project is designed to be deployed on **Netlify** using Netlify Functions.
+Visit the live site here: [https://tecktonik-26.netlify.app/](https://tecktonik-26.netlify.app/)
 
 ## ✨ Features
 - **Modern UI/UX**: Built with a sleek glassmorphism theme, neon accents, and responsive design.

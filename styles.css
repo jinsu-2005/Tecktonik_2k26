@@ -183,11 +183,98 @@ header {
 .main-title {
     font-size: 3rem;
     margin-bottom: 10px;
-    margin-bottom: 10px;
-    background: -webkit-linear-gradient(#fff, var(--primary-blue));
+    position: relative;
+    background: linear-gradient(to right,
+            #fff 20%,
+            var(--primary-blue) 40%,
+            var(--primary-blue) 60%,
+            #fff 80%);
+    background-size: 200% auto;
+    color: #000;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: shine 5s linear infinite, title-breath 4s ease-in-out infinite;
+    font-weight: 900;
+    letter-spacing: 5px;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+@keyframes title-breath {
+
+    0%,
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    }
+
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
+    }
+}
+
+/* Remove old glitch pseudo-elements */
+.glitched::before,
+.glitched::after {
+    display: none;
+}
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(31px, 9999px, 94px, 0);
+    }
+
+    5% {
+        clip: rect(70px, 9999px, 71px, 0);
+    }
+
+    10% {
+        clip: rect(29px, 9999px, 83px, 0);
+    }
+
+    15% {
+        clip: rect(16px, 9999px, 91px, 0);
+    }
+
+    20% {
+        clip: rect(2px, 9999px, 23px, 0);
+    }
+
+    25% {
+        clip: rect(67px, 9999px, 20px, 0);
+    }
+}
+
+@keyframes glitch-anim2 {
+    0% {
+        clip: rect(65px, 9999px, 100px, 0);
+    }
+
+    10% {
+        clip: rect(52px, 9999px, 32px, 0);
+    }
+
+    20% {
+        clip: rect(44px, 9999px, 52px, 0);
+    }
+
+    30% {
+        clip: rect(11px, 9999px, 10px, 0);
+    }
+
+    40% {
+        clip: rect(75px, 9999px, 5px, 0);
+    }
+
+    50% {
+        clip: rect(46px, 9999px, 55px, 0);
+    }
 }
 
 @keyframes shake {
@@ -214,11 +301,32 @@ header {
 }
 
 .date-badge {
-    background: var(--glass-bg);
-    padding: 5px 15px;
-    border: 1px solid var(--primary-purple);
-    border-radius: 20px;
-    margin: 20px 0;
+    background: rgba(0, 243, 255, 0.05);
+    padding: 8px 25px;
+    border: 1px solid var(--primary-blue);
+    border-radius: 50px;
+    margin: 25px 0;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #fff;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    backdrop-filter: blur(5px);
+    display: inline-block;
+    animation: date-glow 4s infinite;
+}
+
+@keyframes date-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+        border-color: #fff;
+    }
 }
 
 .cta-btn {
@@ -603,18 +711,153 @@ tr:hover td {
 }
 
 /* --- Footer & Watermark --- */
-footer {
+/* --- Combined Flashy Glass Footer --- */
+.glass-footer {
     text-align: center;
-    padding: 40px 20px;
-    background: #02040a;
+    padding: 60px 20px 40px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(0, 243, 255, 0.1);
     margin-top: 50px;
+    overflow: hidden;
 }
 
-.watermark-container {
+.footer-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    object-fit: contain;
+}
+
+.contact-info p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+.creator-reveal {
     margin-top: 30px;
-    opacity: 0.2;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
+    display: flex;
+    justify-content: center;
+}
+
+.flashy-pill {
+    background: rgba(0, 243, 255, 0.07);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    padding: 6px 14px;
+    /* Reduced Size */
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    max-width: 110px;
+    /* Reduced Size */
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+    position: relative;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+    animation: pill-pulse 3s infinite;
+}
+
+.pill-icon {
+    margin-right: 8px;
+    font-size: 1rem;
+}
+
+.pill-text {
+    font-size: 0.75rem;
+    /* Slightly Smaller */
+    color: var(--primary-blue);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.pill-expand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.5s ease;
+    width: 0;
+}
+
+.creator-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 10px var(--primary-blue);
+}
+
+.creator-dept {
+    font-size: 0.75rem;
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+/* Flashy Animations */
+@keyframes pill-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+    }
+}
+
+/* Shimmer/Glint Effect */
+.flashy-pill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    transition: 0.5s;
+    transform: skewX(-25deg);
+}
+
+.flashy-pill:hover::before {
+    left: 150%;
+    transition: 0.7s;
+}
+
+/* Hover Reveal State */
+.flashy-pill:hover {
+    max-width: 500px;
+    background: rgba(0, 243, 255, 0.15);
+    border-color: var(--primary-blue);
+    padding-right: 35px;
+    animation: none;
+    /* Stop pulsing on hover */
+}
+
+.flashy-pill:hover .pill-expand {
+    opacity: 1;
+    transform: translateX(0);
+    width: auto;
+    margin-left: 15px;
+}
+
+.flashy-pill:active {
+    transform: scale(0.95);
 }
 
 /* --- Desktop Scaling --- */
