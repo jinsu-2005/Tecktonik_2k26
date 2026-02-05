@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # TECHTONIK ’26 | National Level Technical Symposium
 
 A modern, high-performance web application designed for the **TECHTONIK ’26** National Level Technical Symposium. This project features a stunning glassmorphism UI, interactive shooting star animations, and a serverless backend for participant registration.
@@ -58,7 +57,3 @@ The "View Participants" section is protected by a client-side password.
 
 ---
 *Created for the Techtonik Symposium '26.*
-=======
-# tecktonik
-A sleek, high-performance symposium landing page for Techtonik '26, featuring glass morphism UI, shooting star animations, and a serverless registration system using Netlify Functions and CSV storage.
->>>>>>> 1ec99a8ec394bd8a5e8258398e7eb8b3e6c02929
