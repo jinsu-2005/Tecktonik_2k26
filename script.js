@@ -106,11 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.reset();
                 otherDeptGroup.classList.add('hidden'); // Reset hidden Input
                 fetchData(); // Refresh count
+            } else if (response.status === 409) {
+                const errData = await response.json();
+                statusMsg.textContent = "❌ " + errData.message;
+                statusMsg.style.color = "#ffeb3b"; // Yellow for warning
             } else {
                 throw new Error('Server Error');
             }
         } catch (error) {
-            statusMsg.textContent = "❌ Error submitting. Please try again.";
+            statusMsg.textContent = "❌ Submission failed. Please try again.";
             statusMsg.style.color = "#ff4444";
         }
     });
@@ -186,9 +190,16 @@ async function fetchData() {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = ''; // Clear existing
 
-        data.forEach(student => {
+        data.forEach((student, index) => {
             const tr = document.createElement('tr');
+
+            // Convert semicolon-separated events into individual badges
+            const eventTags = student.events.split('; ')
+                .map(event => `<span class="event-tag">${event}</span>`)
+                .join('');
+
             tr.innerHTML = `
+                <td class="col-index">${index + 1}</td>
                 <td>${student.name}</td>
                 <td>${student.dept}</td>
                 <td>${student.year}</td>
@@ -196,7 +207,7 @@ async function fetchData() {
                 <td>${student.email}</td>
                 <td>${student.mobile}</td>
                 <td>${student.gender}</td>
-                <td>${student.events}</td>
+                <td>${eventTags}</td>
             `;
             tbody.appendChild(tr);
         });

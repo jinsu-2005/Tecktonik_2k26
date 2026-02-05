@@ -8,6 +8,27 @@ exports.handler = async (event, context) => {
         try {
             const data = JSON.parse(event.body);
 
+            // 1. Duplicate Prevention Check
+            // We check if either email or mobile already exists
+            const checkResponse = await fetch(`${SUPABASE_URL}/rest/v1/registrations?or=(email.eq.${data.email},mobile.eq.${data.mobile})`, {
+                method: 'GET',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+
+            if (checkResponse.ok) {
+                const existing = await checkResponse.json();
+                if (existing.length > 0) {
+                    return {
+                        statusCode: 409,
+                        body: JSON.stringify({ error: "Duplicate Entry", message: "Email or Mobile Number already registered!" })
+                    };
+                }
+            }
+
+            // 2. Insert New Data
             const response = await fetch(`${SUPABASE_URL}/rest/v1/registrations`, {
                 method: 'POST',
                 headers: {
@@ -29,8 +50,6 @@ exports.handler = async (event, context) => {
             });
 
             if (!response.ok) {
-                const error = await response.text();
-                console.error("Supabase Error:", error);
                 throw new Error("Failed to save to Supabase");
             }
 
@@ -39,7 +58,6 @@ exports.handler = async (event, context) => {
                 body: JSON.stringify({ message: "Saved Successfully" })
             };
         } catch (error) {
-            console.error("Function Error:", error);
             return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
         }
     }
@@ -47,7 +65,7 @@ exports.handler = async (event, context) => {
     // --- GET: Fetch Participants ---
     if (event.httpMethod === 'GET') {
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/registrations?select=*`, {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/registrations?select=*&order=created_at.asc`, {
                 method: 'GET',
                 headers: {
                     'apikey': SUPABASE_KEY,
