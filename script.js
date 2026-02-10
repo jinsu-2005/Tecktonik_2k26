@@ -26,28 +26,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Accordion Logic
     const acc = document.getElementsByClassName("accordion");
 
-    function toggleAll(isOpen) {
+    function openAll() {
         for (let i = 0; i < acc.length; i++) {
             const panel = acc[i].nextElementSibling;
-            if (isOpen) {
-                acc[i].classList.add("active");
-                panel.style.display = "block";
-                acc[i].innerHTML = "Hide Instructions ▴";
-            } else {
-                acc[i].classList.remove("active");
-                panel.style.display = "none";
-                acc[i].innerHTML = "View Instructions ▾";
-            }
+            acc[i].classList.add("active");
+            panel.style.display = "block";
+            acc[i].innerHTML = "Hide Instructions ▴";
         }
+    }
+
+    function closeOne(element) {
+        const panel = element.nextElementSibling;
+        element.classList.remove("active");
+        panel.style.display = "none";
+        element.innerHTML = "View Instructions ▾";
     }
 
     for (let i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function () {
-            // Determine desired state based on current state of clicked element
-            // If it is currently active, we are closing it (and thus all).
-            // If it is not active, we are opening it (and thus all).
-            const willOpen = !this.classList.contains("active");
-            toggleAll(willOpen);
+            if (this.classList.contains("active")) {
+                // Currently open, so close ONLY this one
+                closeOne(this);
+            } else {
+                // Currently closed, so open ALL
+                openAll();
+            }
         });
     }
 
