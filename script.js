@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const panel = this.nextElementSibling;
             if (panel.style.display === "block") {
                 panel.style.display = "none";
-                this.innerHTML = "View Rules ▾";
+                this.innerHTML = "View Instructions ▾";
             } else {
                 panel.style.display = "block";
-                this.innerHTML = "Hide Rules ▴";
+                this.innerHTML = "Hide Instructions ▴";
             }
         });
     }
