@@ -23,18 +23,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 1. Accordion Logic
+    // 1. Accordion Logic
     const acc = document.getElementsByClassName("accordion");
+
+    function toggleAll(isOpen) {
+        for (let i = 0; i < acc.length; i++) {
+            const panel = acc[i].nextElementSibling;
+            if (isOpen) {
+                acc[i].classList.add("active");
+                panel.style.display = "block";
+                acc[i].innerHTML = "Hide Instructions ▴";
+            } else {
+                acc[i].classList.remove("active");
+                panel.style.display = "none";
+                acc[i].innerHTML = "View Instructions ▾";
+            }
+        }
+    }
+
     for (let i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            const panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-                this.innerHTML = "View Instructions ▾";
-            } else {
-                panel.style.display = "block";
-                this.innerHTML = "Hide Instructions ▴";
-            }
+            // Determine desired state based on current state of clicked element
+            // If it is currently active, we are closing it (and thus all).
+            // If it is not active, we are opening it (and thus all).
+            const willOpen = !this.classList.contains("active");
+            toggleAll(willOpen);
         });
     }
 
@@ -129,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pwdError = document.getElementById('pwdError');
 
     // Set your admin password here
-    const ADMIN_PASSWORD = "admin";
+    const ADMIN_PASSWORD = "techtonik@2026";
 
     viewBtn.addEventListener('click', () => {
         if (listDiv.classList.contains('hidden')) {
